@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Security Club Booth Challenge</title>
+  <style>
+    :root {
+      --primary: #0088cc;
+      --primary-dark: #005580;
+      --bg: #f4f7f9;
+      --card-bg: #ffffff;
+      --text: #1a1a1a;
+      --accent: #2e7d32;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .app-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      max-width: 450px;
+      width: 100%;
+      padding: 28px;
+      text-align: center;
+      position: relative;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e3f2fd;
+      color: var(--primary);
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1, h2 {
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: #555;
+      font-size: 15px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .scoring-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .score-btn {
+      background: #f8f9fa;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text);
+    }
+
+    .score-btn:hover {
+      border-color: var(--primary);
+      background: #eef7fc;
+    }
+
+    .score-btn.selected {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .nav-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 28px;
+      font-size: 16px;
+      font-weight: bold;
+      width: 100%;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .final-score {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 16px 0;
+    }
+
+    .join-box {
+      background: #e8f5e9;
+      border-left: 4px solid var(--accent);
+      padding: 16px;
+      border-radius: 8px;
+      text-align: left;
+      margin-top: 20px;
+    }
+
+    .join-box h3 {
+      color: var(--accent);
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-card">
+    <div class="progress-bar">
+      <div id="progress" class="progress-fill"></div>
+    </div>
+
+    <!-- WELCOME SCREEN -->
+    <div id="screen-start">
+      <span class="badge">Club Fair Challenge</span>
+      <h1>Cyber Security Interactive Quest</h1>
+      <p>Welcome! Complete our physical table games, record your points at each station, and see if you have what it takes to join our cybersecurity team!</p>
+      <button class="nav-btn" onclick="nextStep()">Start Challenge</button>
+    </div>
+
+    <!-- GAME STATIONS (POPULATED DYNAMICALLY VIA JS) -->
+    <div id="screen-station" class="hidden">
+      <span id="station-badge" class="badge">Station 1</span>
+      <h2 id="station-title">Station Title</h2>
+      <p id="station-desc">Instructions for the station.</p>
+      
+      <div class="scoring-options">
+        <button class="score-btn" onclick="selectScore(0, this)">❌ Missed / Skipped (+0 pts)</button>
+        <button class="score-btn" onclick="selectScore(10, this)">⚡ Completed (+10 pts)</button>
+        <button class="score-btn" onclick="selectScore(20, this)">🔥 Perfect / Mastered (+20 pts)</button>
+      </div>
+
+      <button id="next-btn" class="nav-btn" onclick="nextStep()" disabled style="opacity: 0.5;">Select Result to Continue</button>
+    </div>
+
+    <!-- FINAL RESULT SCREEN -->
+    <div id="screen-finish" class="hidden">
+      <span class="badge" style="background:#e8f5e9; color:var(--accent);">Quest Completed!</span>
+      <h2>Congratulations! 🎉</h2>
+      <p>You completed all the physical station challenges!</p>
+      
+      <div>Your Total Score:</div>
+      <div id="total-score" class="final-score">0</div>
+
+      <div class="join-box">
+        <h3>Become a Cyber Master!</h3>
+        <p style="margin-bottom:0; color:#333;">
+          You don't need any prior experience to start. Join our Cybersecurity Club to learn ethical hacking, secure app building, and problem-solving step-by-step!
+        </p>
+      </div>
+
+      <button class="nav-btn" style="margin-top:20px; background:var(--accent);" onclick="restart()">Restart for Next Student</button>
+    </div>
+  </div>
+
+  <script>
+    // Stations derived from your cybertalent document
+    const stations = [
+      {
+        title: "Spot the Fake Link",
+        desc: "Look at the printed links on the table board. Can you identify which domains are typosquatted phishes (e.g., paypa1 vs paypal)?"[cite: 2]
+      },
+      {
+        title: "Security Icons & Flashcards",
+        desc: "Match security icons (HTTPS, Firewall) to their definitions or answer our flip-card safety questions!"[cite: 2]
+      },
+      {
+        title: "Password Relay Race",
+        desc: "Build a high-entropy passphrase with your team on the board within 30 seconds!"[cite: 2]
+      },
+      {
+        title: "Human Shift Cipher Chain",
+        desc: "Decode the secret 3-word message using the letter shift pattern before time runs out!"[cite: 2]
+      },
+      {
+        title: "Social Engineering Defense",
+        desc: "Chat with our booth volunteer and protect your secret identity from being extracted during small talk!"[cite: 2]
+      }
+    ];
+
+    let currentStep = -1; // -1 = Welcome screen
+    let totalScore = 0;
+    let selectedCurrentScore = null;
+
+    function updateProgress() {
+      const percentage = currentStep < 0 ? 0 : Math.min(100, ((currentStep + 1) / stations.length) * 100);
+      document.getElementById("progress").style.width = percentage + "%";
+    }
+
+    function selectScore(points, btnElement) {
+      selectedCurrentScore = points;
+      
+      // Update UI toggle state
+      const buttons = document.querySelectorAll(".score-btn");
+      buttons.forEach(btn => btn.classList.remove("selected"));
+      btnElement.classList.add("selected");
+
+      // Enable Next button
+      const nextBtn = document.getElementById("next-btn");
+      nextBtn.disabled = false;
+      nextBtn.style.opacity = "1";
+      nextBtn.innerText = "Next Station →";
+    }
+
+    function nextStep() {
+      if (currentStep >= 0 && selectedCurrentScore !== null) {
+        totalScore += selectedCurrentScore;
+      }
+
+      currentStep++;
+      selectedCurrentScore = null;
+      updateProgress();
+
+      if (currentStep < stations.length) {
+        // Show Station Screen
+        document.getElementById("screen-start").classList.add("hidden");
+        document.getElementById("screen-station").classList.remove("hidden");
+
+        // Load station content
+        const station = stations[currentStep];
+        document.getElementById("station-badge").innerText = `Station ${currentStep + 1} of ${stations.length}`;
+        document.getElementById("station-title").innerText = station.title;
+        document.getElementById("station-desc").innerText = station.desc;
+
+        // Reset option buttons
+        const buttons = document.querySelectorAll(".score-btn");
+        buttons.forEach(btn => btn.classList.remove("selected"));
+
+        const nextBtn = document.getElementById("next-btn");
+        nextBtn.disabled = true;
+        nextBtn.style.opacity = "0.5";
+        nextBtn.innerText = "Select Result to Continue";
+      } else {
+        // Show Final Screen
+        document.getElementById("screen-station").classList.add("hidden");
+        document.getElementById("screen-finish").classList.remove("hidden");
+        document.getElementById("total-score").innerText = `${totalScore} / ${stations.length * 20}`;
+      }
+    }
+
+    function restart() {
+      currentStep = -1;
+      totalScore = 0;
+      selectedCurrentScore = null;
+      updateProgress();
+
+      document.getElementById("screen-finish").classList.add("hidden");
+      document.getElementById("screen-start").classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
