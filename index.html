@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cyber Security Interactive Challenge</title>
+  <title>Cyber Security Interactive Booth Challenge</title>
   <style>
     :root {
       --primary: #0088cc;
@@ -161,7 +161,7 @@
       font-size: 13px;
       cursor: pointer;
       transition: all 0.2s;
-      min-height: 50px;
+      min-height: 54px;
       display: flex;
       align-items: center;
     }
@@ -182,7 +182,7 @@
     /* FLASHCARD STYLES */
     .flashcard {
       background: #ffffff;
-      border: 2px solid #0088cc;
+      border: 2px solid var(--primary);
       border-radius: 12px;
       padding: 20px;
       min-height: 140px;
@@ -249,15 +249,15 @@
     <div id="screen-start">
       <span class="badge">Cyber Security Club</span>
       <h1>Interactive Fair Challenge</h1>
-      <p>Test your cyber security skills across our digital interactive games! Earn points and see if you have what it takes to join our club team.</p>
-      <button class="nav-btn" onclick="startApp()">Start Challenge</button>
+      <p>Play through our interactive cybersecurity mini-games! Test your eye for fake links, match security icons, and flip through safety flashcards.</p>
+      <button class="nav-btn" onclick="startApp()">Start Games</button>
     </div>
 
-    <!-- STATION 1: SPOT THE FAKE LINK -->
+    <!-- GAME 1: SPOT THE FAKE LINK -->
     <div id="screen-links" class="hidden">
-      <span class="badge">Station 1: Spot the Fake Link</span>
+      <span id="link-progress-badge" class="badge">Game 1: Fake Link Search (1/4)</span>
       <h2>Which link is LEGITIMATE (Safe)?</h2>
-      <p id="link-instruction">Identify and tap the authentic website address:</p>
+      <p>Tap the authentic website address to earn points:</p>
 
       <div class="link-options">
         <div id="link-a" class="link-card" onclick="checkLink(0)"></div>
@@ -268,9 +268,9 @@
       <button id="link-next-btn" class="nav-btn" onclick="nextLink()" disabled>Next Pair →</button>
     </div>
 
-    <!-- STATION 2: MATCH THE ICONS -->
+    <!-- GAME 2: MATCH THE ICONS -->
     <div id="screen-match" class="hidden">
-      <span class="badge">Station 2: Matching Game</span>
+      <span class="badge">Game 2: Icon Matching</span>
       <h2>Match Icon to Meaning</h2>
       <p>Tap an icon on the left, then tap its correct meaning on the right!</p>
 
@@ -283,9 +283,9 @@
       <button id="match-next-btn" class="nav-btn" onclick="goToFlashcards()" disabled>Go to Flashcards →</button>
     </div>
 
-    <!-- STATION 3: FLASHCARDS -->
+    <!-- GAME 3: FLASHCARDS -->
     <div id="screen-flashcards" class="hidden">
-      <span class="badge">Station 3: Safety Flashcards</span>
+      <span class="badge">Game 3: Safety Flashcards</span>
       <h2 id="card-counter">Question 1 of 3</h2>
       <p>Tap the card to flip between Question and Answer!</p>
 
@@ -305,7 +305,7 @@
     <div id="screen-finish" class="hidden">
       <span class="badge" style="background:#e8f5e9; color:var(--accent);">Quest Completed!</span>
       <h2>Congratulations! 🎉</h2>
-      <p>You completed the Cyber Security Challenge!</p>
+      <p>You completed the Cyber Security Interactive Challenge!</p>
       
       <div>Your Total Game Score:</div>
       <div id="total-score" class="final-score">0 pts</div>
@@ -324,7 +324,7 @@
   <script>
     let totalScore = 0;
 
-    // DATA FROM YOUR CYBERTALENT DOCUMENT
+    // DATA DERIVED FROM YOUR DOCUMENT
     const linkPairs = [
       { legitimate: "https://login.microsoft.com", fake: "https://l0gin.microsoft.com" },
       { legitimate: "https://www.apple.com", fake: "https://www.app1e.com" },
@@ -354,9 +354,8 @@
       }
     ];
 
-    // STATION 1 LOGIC: LINKS
+    // GAME 1 LOGIC: LINKS
     let currentLinkIndex = 0;
-    let selectedLinkOption = null;
 
     function startApp() {
       document.getElementById("screen-start").classList.add("hidden");
@@ -376,6 +375,7 @@
       elemB.className = "link-card";
       document.getElementById("link-feedback").innerText = "";
       document.getElementById("link-next-btn").disabled = true;
+      document.getElementById("link-progress-badge").innerText = `Game 1: Fake Link Search (${currentLinkIndex + 1}/${linkPairs.length})`;
 
       if (isLegitA) {
         elemA.innerText = pair.legitimate;
@@ -391,7 +391,7 @@
     }
 
     function checkLink(index) {
-      if (!document.getElementById("link-next-btn").disabled) return; // already selected
+      if (!document.getElementById("link-next-btn").disabled) return;
 
       const elemA = document.getElementById("link-a");
       const elemB = document.getElementById("link-b");
@@ -405,7 +405,7 @@
         totalScore += 10;
       } else {
         chosen.classList.add("wrong");
-        feedback.innerText = "❌ Fake link! Look closely at typosquatted characters.";
+        feedback.innerText = "❌ Fake link! Notice the altered characters.";
         feedback.style.color = "var(--danger)";
         if (elemA.dataset.correct === "true") elemA.classList.add("correct");
         if (elemB.dataset.correct === "true") elemB.classList.add("correct");
@@ -419,7 +419,6 @@
       if (currentLinkIndex < linkPairs.length) {
         loadLinkPair();
       } else {
-        // Move to station 2
         document.getElementById("screen-links").classList.add("hidden");
         document.getElementById("screen-match").classList.remove("hidden");
         document.getElementById("progress").style.width = "50%";
@@ -427,7 +426,7 @@
       }
     }
 
-    // STATION 2 LOGIC: MATCHING GAME
+    // GAME 2 LOGIC: MATCHING
     let selectedIconObj = null;
     let selectedMeaningObj = null;
     let matchesFound = 0;
@@ -439,7 +438,6 @@
       iconsContainer.innerHTML = "";
       meaningsContainer.innerHTML = "";
 
-      // Shuffle lists
       const shuffledMeanings = [...matchItems].sort(() => Math.random() - 0.5);
 
       matchItems.forEach(item => {
@@ -515,7 +513,7 @@
       loadFlashcard();
     }
 
-    // STATION 3 LOGIC: FLASHCARDS
+    // GAME 3 LOGIC: FLASHCARDS
     let cardIndex = 0;
     let showingAnswer = false;
 
