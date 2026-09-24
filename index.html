@@ -151,7 +151,7 @@
     }
 
     .hidden {
-      display: none;
+      display: none !important;
     }
   </style>
 </head>
@@ -170,7 +170,7 @@
       <button class="nav-btn" onclick="nextStep()">Start Challenge</button>
     </div>
 
-    <!-- GAME STATIONS (POPULATED DYNAMICALLY VIA JS) -->
+    <!-- GAME STATIONS -->
     <div id="screen-station" class="hidden">
       <span id="station-badge" class="badge">Station 1</span>
       <h2 id="station-title">Station Title</h2>
@@ -206,31 +206,30 @@
   </div>
 
   <script>
-    // Stations derived from your cybertalent document
     const stations = [
       {
         title: "Spot the Fake Link",
-        desc: "Look at the printed links on the table board. Can you identify which domains are typosquatted phishes (e.g., paypa1 vs paypal)?"[cite: 2]
+        desc: "Look at the printed links on the table board. Can you identify which domains are typosquatted phishes (e.g., paypa1 vs paypal)?"
       },
       {
         title: "Security Icons & Flashcards",
-        desc: "Match security icons (HTTPS, Firewall) to their definitions or answer our flip-card safety questions!"[cite: 2]
+        desc: "Match security icons (HTTPS, Firewall) to their definitions or answer our flip-card safety questions!"
       },
       {
         title: "Password Relay Race",
-        desc: "Build a high-entropy passphrase with your team on the board within 30 seconds!"[cite: 2]
+        desc: "Build a high-entropy passphrase with your team on the board within 30 seconds!"
       },
       {
         title: "Human Shift Cipher Chain",
-        desc: "Decode the secret 3-word message using the letter shift pattern before time runs out!"[cite: 2]
+        desc: "Decode the secret 3-word message using the letter shift pattern before time runs out!"
       },
       {
         title: "Social Engineering Defense",
-        desc: "Chat with our booth volunteer and protect your secret identity from being extracted during small talk!"[cite: 2]
+        desc: "Chat with our booth volunteer and protect your secret identity from being extracted during small talk!"
       }
     ];
 
-    let currentStep = -1; // -1 = Welcome screen
+    let currentStep = -1;
     let totalScore = 0;
     let selectedCurrentScore = null;
 
@@ -241,13 +240,10 @@
 
     function selectScore(points, btnElement) {
       selectedCurrentScore = points;
-      
-      // Update UI toggle state
       const buttons = document.querySelectorAll(".score-btn");
       buttons.forEach(btn => btn.classList.remove("selected"));
       btnElement.classList.add("selected");
 
-      // Enable Next button
       const nextBtn = document.getElementById("next-btn");
       nextBtn.disabled = false;
       nextBtn.style.opacity = "1";
@@ -264,17 +260,14 @@
       updateProgress();
 
       if (currentStep < stations.length) {
-        // Show Station Screen
         document.getElementById("screen-start").classList.add("hidden");
         document.getElementById("screen-station").classList.remove("hidden");
 
-        // Load station content
         const station = stations[currentStep];
         document.getElementById("station-badge").innerText = `Station ${currentStep + 1} of ${stations.length}`;
         document.getElementById("station-title").innerText = station.title;
         document.getElementById("station-desc").innerText = station.desc;
 
-        // Reset option buttons
         const buttons = document.querySelectorAll(".score-btn");
         buttons.forEach(btn => btn.classList.remove("selected"));
 
@@ -283,7 +276,6 @@
         nextBtn.style.opacity = "0.5";
         nextBtn.innerText = "Select Result to Continue";
       } else {
-        // Show Final Screen
         document.getElementById("screen-station").classList.add("hidden");
         document.getElementById("screen-finish").classList.remove("hidden");
         document.getElementById("total-score").innerText = `${totalScore} / ${stations.length * 20}`;
