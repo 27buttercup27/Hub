@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cyber Security Club Booth Challenge</title>
+  <title>Cyber Security Interactive Challenge</title>
   <style>
     :root {
       --primary: #0088cc;
@@ -12,6 +12,7 @@
       --card-bg: #ffffff;
       --text: #1a1a1a;
       --accent: #2e7d32;
+      --danger: #d32f2f;
     }
 
     * {
@@ -35,7 +36,7 @@
       background: var(--card-bg);
       border-radius: 16px;
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-      max-width: 450px;
+      max-width: 480px;
       width: 100%;
       padding: 28px;
       text-align: center;
@@ -46,7 +47,7 @@
       height: 8px;
       background: #e0e0e0;
       border-radius: 4px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       overflow: hidden;
     }
 
@@ -70,45 +71,15 @@
     }
 
     h1, h2 {
-      font-size: 22px;
+      font-size: 20px;
       margin-bottom: 12px;
     }
 
     p {
       color: #555;
-      font-size: 15px;
+      font-size: 14px;
       line-height: 1.5;
-      margin-bottom: 20px;
-    }
-
-    .scoring-options {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 24px;
-    }
-
-    .score-btn {
-      background: #f8f9fa;
-      border: 2px solid #e0e0e0;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      color: var(--text);
-    }
-
-    .score-btn:hover {
-      border-color: var(--primary);
-      background: #eef7fc;
-    }
-
-    .score-btn.selected {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
+      margin-bottom: 16px;
     }
 
     .nav-btn {
@@ -116,16 +87,134 @@
       color: white;
       border: none;
       border-radius: 10px;
-      padding: 14px 28px;
-      font-size: 16px;
+      padding: 12px 24px;
+      font-size: 15px;
       font-weight: bold;
       width: 100%;
       cursor: pointer;
       transition: background 0.2s ease;
+      margin-top: 10px;
     }
 
     .nav-btn:hover {
       background: var(--primary-dark);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* SPOT THE FAKE LINK STYLES */
+    .link-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .link-card {
+      background: #f8f9fa;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 14px;
+      font-family: monospace;
+      font-size: 14px;
+      word-break: break-all;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .link-card:hover {
+      border-color: var(--primary);
+      background: #eef7fc;
+    }
+
+    .link-card.correct {
+      background: #e8f5e9;
+      border-color: var(--accent);
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .link-card.wrong {
+      background: #ffebee;
+      border-color: var(--danger);
+      color: var(--danger);
+      font-weight: bold;
+    }
+
+    /* MATCHING GAME STYLES */
+    .match-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .match-item {
+      background: #f8f9fa;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+    }
+
+    .match-item.selected {
+      border-color: var(--primary);
+      background: #e3f2fd;
+    }
+
+    .match-item.matched {
+      background: #e8f5e9;
+      border-color: var(--accent);
+      color: var(--accent);
+      cursor: default;
+      font-weight: bold;
+    }
+
+    /* FLASHCARD STYLES */
+    .flashcard {
+      background: #ffffff;
+      border: 2px solid #0088cc;
+      border-radius: 12px;
+      padding: 20px;
+      min-height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 16px;
+      transition: transform 0.2s;
+    }
+
+    .flashcard:active {
+      transform: scale(0.98);
+    }
+
+    .card-controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .secondary-btn {
+      background: #e0e0e0;
+      color: #333;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      font-weight: bold;
+      flex: 1;
+      cursor: pointer;
     }
 
     .final-score {
@@ -141,13 +230,7 @@
       padding: 16px;
       border-radius: 8px;
       text-align: left;
-      margin-top: 20px;
-    }
-
-    .join-box h3 {
-      color: var(--accent);
-      font-size: 16px;
-      margin-bottom: 6px;
+      margin-top: 16px;
     }
 
     .hidden {
@@ -164,40 +247,73 @@
 
     <!-- WELCOME SCREEN -->
     <div id="screen-start">
-      <span class="badge">Club Fair Challenge</span>
-      <h1>Cyber Security Interactive Quest</h1>
-      <p>Welcome! Complete our physical table games, record your points at each station, and see if you have what it takes to join our cybersecurity team!</p>
-      <button class="nav-btn" onclick="nextStep()">Start Challenge</button>
+      <span class="badge">Cyber Security Club</span>
+      <h1>Interactive Fair Challenge</h1>
+      <p>Test your cyber security skills across our digital interactive games! Earn points and see if you have what it takes to join our club team.</p>
+      <button class="nav-btn" onclick="startApp()">Start Challenge</button>
     </div>
 
-    <!-- GAME STATIONS -->
-    <div id="screen-station" class="hidden">
-      <span id="station-badge" class="badge">Station 1</span>
-      <h2 id="station-title">Station Title</h2>
-      <p id="station-desc">Instructions for the station.</p>
-      
-      <div class="scoring-options">
-        <button class="score-btn" onclick="selectScore(0, this)">❌ Missed / Skipped (+0 pts)</button>
-        <button class="score-btn" onclick="selectScore(10, this)">⚡ Completed (+10 pts)</button>
-        <button class="score-btn" onclick="selectScore(20, this)">🔥 Perfect / Mastered (+20 pts)</button>
+    <!-- STATION 1: SPOT THE FAKE LINK -->
+    <div id="screen-links" class="hidden">
+      <span class="badge">Station 1: Spot the Fake Link</span>
+      <h2>Which link is LEGITIMATE (Safe)?</h2>
+      <p id="link-instruction">Identify and tap the authentic website address:</p>
+
+      <div class="link-options">
+        <div id="link-a" class="link-card" onclick="checkLink(0)"></div>
+        <div id="link-b" class="link-card" onclick="checkLink(1)"></div>
       </div>
 
-      <button id="next-btn" class="nav-btn" onclick="nextStep()" disabled style="opacity: 0.5;">Select Result to Continue</button>
+      <p id="link-feedback" style="font-weight: bold; min-height: 20px;"></p>
+      <button id="link-next-btn" class="nav-btn" onclick="nextLink()" disabled>Next Pair →</button>
     </div>
 
-    <!-- FINAL RESULT SCREEN -->
+    <!-- STATION 2: MATCH THE ICONS -->
+    <div id="screen-match" class="hidden">
+      <span class="badge">Station 2: Matching Game</span>
+      <h2>Match Icon to Meaning</h2>
+      <p>Tap an icon on the left, then tap its correct meaning on the right!</p>
+
+      <div class="match-container">
+        <div id="icons-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        <div id="meanings-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+      </div>
+
+      <p id="match-feedback" style="font-weight: bold; min-height: 20px;"></p>
+      <button id="match-next-btn" class="nav-btn" onclick="goToFlashcards()" disabled>Go to Flashcards →</button>
+    </div>
+
+    <!-- STATION 3: FLASHCARDS -->
+    <div id="screen-flashcards" class="hidden">
+      <span class="badge">Station 3: Safety Flashcards</span>
+      <h2 id="card-counter">Question 1 of 3</h2>
+      <p>Tap the card to flip between Question and Answer!</p>
+
+      <div id="flashcard-display" class="flashcard" onclick="flipCard()">
+        Loading card...
+      </div>
+
+      <div class="card-controls">
+        <button class="secondary-btn" onclick="prevCard()">← Jump Back</button>
+        <button class="secondary-btn" onclick="nextCard()">Skip / Next →</button>
+      </div>
+
+      <button class="nav-btn" style="margin-top: 16px; background: var(--accent);" onclick="finishApp()">Finish Challenge 🎉</button>
+    </div>
+
+    <!-- FINAL SCREEN -->
     <div id="screen-finish" class="hidden">
       <span class="badge" style="background:#e8f5e9; color:var(--accent);">Quest Completed!</span>
       <h2>Congratulations! 🎉</h2>
-      <p>You completed all the physical station challenges!</p>
+      <p>You completed the Cyber Security Challenge!</p>
       
-      <div>Your Total Score:</div>
-      <div id="total-score" class="final-score">0</div>
+      <div>Your Total Game Score:</div>
+      <div id="total-score" class="final-score">0 pts</div>
 
       <div class="join-box">
-        <h3>Become a Cyber Master!</h3>
+        <h3 style="color:var(--accent); margin-bottom: 6px;">Become a Cyber Master!</h3>
         <p style="margin-bottom:0; color:#333;">
-          You don't need any prior experience to start. Join our Cybersecurity Club to learn ethical hacking, secure app building, and problem-solving step-by-step!
+          You don't need prior technical knowledge to join. We offer mentorship, hands-on practice, and projects to help you master tech on your own terms!
         </p>
       </div>
 
@@ -206,90 +322,252 @@
   </div>
 
   <script>
-    const stations = [
+    let totalScore = 0;
+
+    // DATA FROM YOUR CYBERTALENT DOCUMENT
+    const linkPairs = [
+      { legitimate: "https://login.microsoft.com", fake: "https://l0gin.microsoft.com" },
+      { legitimate: "https://www.apple.com", fake: "https://www.app1e.com" },
+      { legitimate: "https://www.amazon.com", fake: "https://www.arnazon.com" },
+      { legitimate: "www.google.com", fake: "www.googIe.com" }
+    ];
+
+    const matchItems = [
+      { id: 1, icon: "🔒 Padlock Icon", meaning: "Encrypted / Secure Connection (HTTPS)" },
+      { id: 2, icon: "🛡️ Shield Icon", meaning: "Network Firewall" },
+      { id: 3, icon: "👁️‍🗨️ / 🙈 Eye with Line", meaning: "Hidden / Masked Password" },
+      { id: 4, icon: "🔑 Key Icon", meaning: "API Key / Access Token" }
+    ];
+
+    const flashcardsData = [
       {
-        title: "Spot the Fake Link",
-        desc: "Look at the printed links on the table board. Can you identify which domains are typosquatted phishes (e.g., paypa1 vs paypal)?"
+        q: "If a public mall Wi-Fi does not require a password to join, is your browsing private?",
+        a: "NO! Unencrypted public Wi-Fi allows anyone on the same network to intercept traffic or set up fake hotspots to spy on your activity."
       },
       {
-        title: "Security Icons & Flashcards",
-        desc: "Match security icons (HTTPS, Firewall) to their definitions or answer our flip-card safety questions!"
+        q: "You get a text saying: 'Your bank account is locked! Click here immediately to verify.' What is the safest first step?",
+        a: "DON'T CLICK! Scammers use urgency to cause panic. Always open your official bank app directly or call the number on your card."
       },
       {
-        title: "Password Relay Race",
-        desc: "Build a high-entropy passphrase with your team on the board within 30 seconds!"
-      },
-      {
-        title: "Human Shift Cipher Chain",
-        desc: "Decode the secret 3-word message using the letter shift pattern before time runs out!"
-      },
-      {
-        title: "Social Engineering Defense",
-        desc: "Chat with our booth volunteer and protect your secret identity from being extracted during small talk!"
+        q: "A popup says: 'You are the 1,000th visitor! Claim your free $100 gift card now.' What happens if you fill out the form?",
+        a: "IT IS A SCAM! Nobody hands out free money randomly. These forms exist to collect and sell your personal information."
       }
     ];
 
-    let currentStep = -1;
-    let totalScore = 0;
-    let selectedCurrentScore = null;
+    // STATION 1 LOGIC: LINKS
+    let currentLinkIndex = 0;
+    let selectedLinkOption = null;
 
-    function updateProgress() {
-      const percentage = currentStep < 0 ? 0 : Math.min(100, ((currentStep + 1) / stations.length) * 100);
-      document.getElementById("progress").style.width = percentage + "%";
+    function startApp() {
+      document.getElementById("screen-start").classList.add("hidden");
+      document.getElementById("screen-links").classList.remove("hidden");
+      document.getElementById("progress").style.width = "25%";
+      loadLinkPair();
     }
 
-    function selectScore(points, btnElement) {
-      selectedCurrentScore = points;
-      const buttons = document.querySelectorAll(".score-btn");
-      buttons.forEach(btn => btn.classList.remove("selected"));
-      btnElement.classList.add("selected");
+    function loadLinkPair() {
+      const pair = linkPairs[currentLinkIndex];
+      const isLegitA = Math.random() < 0.5;
+      
+      const elemA = document.getElementById("link-a");
+      const elemB = document.getElementById("link-b");
 
-      const nextBtn = document.getElementById("next-btn");
-      nextBtn.disabled = false;
-      nextBtn.style.opacity = "1";
-      nextBtn.innerText = "Next Station →";
-    }
+      elemA.className = "link-card";
+      elemB.className = "link-card";
+      document.getElementById("link-feedback").innerText = "";
+      document.getElementById("link-next-btn").disabled = true;
 
-    function nextStep() {
-      if (currentStep >= 0 && selectedCurrentScore !== null) {
-        totalScore += selectedCurrentScore;
-      }
-
-      currentStep++;
-      selectedCurrentScore = null;
-      updateProgress();
-
-      if (currentStep < stations.length) {
-        document.getElementById("screen-start").classList.add("hidden");
-        document.getElementById("screen-station").classList.remove("hidden");
-
-        const station = stations[currentStep];
-        document.getElementById("station-badge").innerText = `Station ${currentStep + 1} of ${stations.length}`;
-        document.getElementById("station-title").innerText = station.title;
-        document.getElementById("station-desc").innerText = station.desc;
-
-        const buttons = document.querySelectorAll(".score-btn");
-        buttons.forEach(btn => btn.classList.remove("selected"));
-
-        const nextBtn = document.getElementById("next-btn");
-        nextBtn.disabled = true;
-        nextBtn.style.opacity = "0.5";
-        nextBtn.innerText = "Select Result to Continue";
+      if (isLegitA) {
+        elemA.innerText = pair.legitimate;
+        elemA.dataset.correct = "true";
+        elemB.innerText = pair.fake;
+        elemB.dataset.correct = "false";
       } else {
-        document.getElementById("screen-station").classList.add("hidden");
-        document.getElementById("screen-finish").classList.remove("hidden");
-        document.getElementById("total-score").innerText = `${totalScore} / ${stations.length * 20}`;
+        elemA.innerText = pair.fake;
+        elemA.dataset.correct = "false";
+        elemB.innerText = pair.legitimate;
+        elemB.dataset.correct = "true";
       }
+    }
+
+    function checkLink(index) {
+      if (!document.getElementById("link-next-btn").disabled) return; // already selected
+
+      const elemA = document.getElementById("link-a");
+      const elemB = document.getElementById("link-b");
+      const chosen = index === 0 ? elemA : elemB;
+      const feedback = document.getElementById("link-feedback");
+
+      if (chosen.dataset.correct === "true") {
+        chosen.classList.add("correct");
+        feedback.innerText = "✓ Correct! That is the legitimate URL (+10 pts)";
+        feedback.style.color = "var(--accent)";
+        totalScore += 10;
+      } else {
+        chosen.classList.add("wrong");
+        feedback.innerText = "❌ Fake link! Look closely at typosquatted characters.";
+        feedback.style.color = "var(--danger)";
+        if (elemA.dataset.correct === "true") elemA.classList.add("correct");
+        if (elemB.dataset.correct === "true") elemB.classList.add("correct");
+      }
+
+      document.getElementById("link-next-btn").disabled = false;
+    }
+
+    function nextLink() {
+      currentLinkIndex++;
+      if (currentLinkIndex < linkPairs.length) {
+        loadLinkPair();
+      } else {
+        // Move to station 2
+        document.getElementById("screen-links").classList.add("hidden");
+        document.getElementById("screen-match").classList.remove("hidden");
+        document.getElementById("progress").style.width = "50%";
+        initMatchingGame();
+      }
+    }
+
+    // STATION 2 LOGIC: MATCHING GAME
+    let selectedIconObj = null;
+    let selectedMeaningObj = null;
+    let matchesFound = 0;
+
+    function initMatchingGame() {
+      const iconsContainer = document.getElementById("icons-list");
+      const meaningsContainer = document.getElementById("meanings-list");
+      
+      iconsContainer.innerHTML = "";
+      meaningsContainer.innerHTML = "";
+
+      // Shuffle lists
+      const shuffledMeanings = [...matchItems].sort(() => Math.random() - 0.5);
+
+      matchItems.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "match-item";
+        div.innerText = item.icon;
+        div.dataset.id = item.id;
+        div.onclick = () => selectIcon(div, item);
+        iconsContainer.appendChild(div);
+      });
+
+      shuffledMeanings.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "match-item";
+        div.innerText = item.meaning;
+        div.dataset.id = item.id;
+        div.onclick = () => selectMeaning(div, item);
+        meaningsContainer.appendChild(div);
+      });
+    }
+
+    function selectIcon(element, item) {
+      if (element.classList.contains("matched")) return;
+      document.querySelectorAll("#icons-list .match-item").forEach(el => el.classList.remove("selected"));
+      element.classList.add("selected");
+      selectedIconObj = { element, id: item.id };
+      checkMatchPair();
+    }
+
+    function selectMeaning(element, item) {
+      if (element.classList.contains("matched")) return;
+      document.querySelectorAll("#meanings-list .match-item").forEach(el => el.classList.remove("selected"));
+      element.classList.add("selected");
+      selectedMeaningObj = { element, id: item.id };
+      checkMatchPair();
+    }
+
+    function checkMatchPair() {
+      if (selectedIconObj && selectedMeaningObj) {
+        const feedback = document.getElementById("match-feedback");
+        if (selectedIconObj.id === selectedMeaningObj.id) {
+          selectedIconObj.element.className = "match-item matched";
+          selectedMeaningObj.element.className = "match-item matched";
+          feedback.innerText = "✓ Correct Match! (+10 pts)";
+          feedback.style.color = "var(--accent)";
+          totalScore += 10;
+          matchesFound++;
+
+          if (matchesFound === matchItems.length) {
+            document.getElementById("match-next-btn").disabled = false;
+          }
+        } else {
+          feedback.innerText = "❌ Incorrect match, try again!";
+          feedback.style.color = "var(--danger)";
+          setTimeout(() => {
+            if (selectedIconObj && !selectedIconObj.element.classList.contains("matched")) {
+              selectedIconObj.element.classList.remove("selected");
+            }
+            if (selectedMeaningObj && !selectedMeaningObj.element.classList.contains("matched")) {
+              selectedMeaningObj.element.classList.remove("selected");
+            }
+          }, 800);
+        }
+        selectedIconObj = null;
+        selectedMeaningObj = null;
+      }
+    }
+
+    function goToFlashcards() {
+      document.getElementById("screen-match").classList.add("hidden");
+      document.getElementById("screen-flashcards").classList.remove("hidden");
+      document.getElementById("progress").style.width = "75%";
+      loadFlashcard();
+    }
+
+    // STATION 3 LOGIC: FLASHCARDS
+    let cardIndex = 0;
+    let showingAnswer = false;
+
+    function loadFlashcard() {
+      showingAnswer = false;
+      const card = flashcardsData[cardIndex];
+      document.getElementById("card-counter").innerText = `Question ${cardIndex + 1} of ${flashcardsData.length}`;
+      document.getElementById("flashcard-display").innerText = "❓ " + card.q;
+      document.getElementById("flashcard-display").style.borderColor = "var(--primary)";
+    }
+
+    function flipCard() {
+      const card = flashcardsData[cardIndex];
+      const display = document.getElementById("flashcard-display");
+      showingAnswer = !showingAnswer;
+
+      if (showingAnswer) {
+        display.innerText = "💡 " + card.a;
+        display.style.borderColor = "var(--accent)";
+      } else {
+        display.innerText = "❓ " + card.q;
+        display.style.borderColor = "var(--primary)";
+      }
+    }
+
+    function nextCard() {
+      cardIndex = (cardIndex + 1) % flashcardsData.length;
+      loadFlashcard();
+    }
+
+    function prevCard() {
+      cardIndex = (cardIndex - 1 + flashcardsData.length) % flashcardsData.length;
+      loadFlashcard();
+    }
+
+    // FINALIZATION
+    function finishApp() {
+      document.getElementById("screen-flashcards").classList.add("hidden");
+      document.getElementById("screen-finish").classList.remove("hidden");
+      document.getElementById("progress").style.width = "100%";
+      document.getElementById("total-score").innerText = `${totalScore} pts`;
     }
 
     function restart() {
-      currentStep = -1;
       totalScore = 0;
-      selectedCurrentScore = null;
-      updateProgress();
-
+      currentLinkIndex = 0;
+      matchesFound = 0;
+      cardIndex = 0;
+      
       document.getElementById("screen-finish").classList.add("hidden");
       document.getElementById("screen-start").classList.remove("hidden");
+      document.getElementById("progress").style.width = "0%";
     }
   </script>
 </body>
