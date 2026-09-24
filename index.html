@@ -6,13 +6,15 @@
   <title>Cyber Security Interactive Booth Challenge</title>
   <style>
     :root {
-      --primary: #0088cc;
-      --primary-dark: #005580;
-      --bg: #f4f7f9;
-      --card-bg: #ffffff;
-      --text: #1a1a1a;
-      --accent: #2e7d32;
-      --danger: #d32f2f;
+      --primary: #00d2ff;
+      --primary-dark: #0088cc;
+      --bg: #0b0f19;
+      --card-bg: #131b2e;
+      --text: #e0e6ed;
+      --text-muted: #94a3b8;
+      --accent: #00ff88;
+      --danger: #ff4757;
+      --border-color: #1e293b;
     }
 
     * {
@@ -30,12 +32,14 @@
       align-items: center;
       min-height: 100vh;
       padding: 20px;
+      background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, var(--bg) 70%);
     }
 
     .app-card {
       background: var(--card-bg);
       border-radius: 16px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 0 25px rgba(0, 210, 255, 0.15);
+      border: 1px solid var(--border-color);
       max-width: 480px;
       width: 100%;
       padding: 28px;
@@ -45,7 +49,7 @@
 
     .progress-bar {
       height: 8px;
-      background: #e0e0e0;
+      background: #1e293b;
       border-radius: 4px;
       margin-bottom: 20px;
       overflow: hidden;
@@ -53,15 +57,16 @@
 
     .progress-fill {
       height: 100%;
-      background: var(--primary);
+      background: linear-gradient(90deg, var(--primary-dark), var(--primary));
       width: 0%;
       transition: width 0.3s ease;
     }
 
     .badge {
       display: inline-block;
-      background: #e3f2fd;
+      background: rgba(0, 210, 255, 0.1);
       color: var(--primary);
+      border: 1px solid rgba(0, 210, 255, 0.3);
       padding: 4px 12px;
       border-radius: 12px;
       font-size: 12px;
@@ -73,10 +78,11 @@
     h1, h2 {
       font-size: 20px;
       margin-bottom: 12px;
+      color: #ffffff;
     }
 
     p {
-      color: #555;
+      color: var(--text-muted);
       font-size: 14px;
       line-height: 1.5;
       margin-bottom: 16px;
@@ -84,7 +90,7 @@
 
     .nav-btn {
       background: var(--primary);
-      color: white;
+      color: #0b0f19;
       border: none;
       border-radius: 10px;
       padding: 12px 24px;
@@ -92,17 +98,20 @@
       font-weight: bold;
       width: 100%;
       cursor: pointer;
-      transition: background 0.2s ease;
+      transition: all 0.2s ease;
       margin-top: 10px;
+      box-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
     }
 
     .nav-btn:hover {
-      background: var(--primary-dark);
+      background: #33ddff;
+      box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
     }
 
     .nav-btn:disabled {
-      opacity: 0.5;
+      opacity: 0.3;
       cursor: not-allowed;
+      box-shadow: none;
     }
 
     /* SPOT THE FAKE LINK STYLES */
@@ -114,8 +123,8 @@
     }
 
     .link-card {
-      background: #f8f9fa;
-      border: 2px solid #e0e0e0;
+      background: #0f172a;
+      border: 2px solid var(--border-color);
       border-radius: 10px;
       padding: 14px;
       font-family: monospace;
@@ -123,22 +132,23 @@
       word-break: break-all;
       cursor: pointer;
       transition: all 0.2s;
+      color: var(--text);
     }
 
     .link-card:hover {
       border-color: var(--primary);
-      background: #eef7fc;
+      background: #1e293b;
     }
 
     .link-card.correct {
-      background: #e8f5e9;
+      background: rgba(0, 255, 136, 0.1);
       border-color: var(--accent);
       color: var(--accent);
       font-weight: bold;
     }
 
     .link-card.wrong {
-      background: #ffebee;
+      background: rgba(255, 71, 87, 0.1);
       border-color: var(--danger);
       color: var(--danger);
       font-weight: bold;
@@ -154,8 +164,8 @@
     }
 
     .match-item {
-      background: #f8f9fa;
-      border: 2px solid #e0e0e0;
+      background: #0f172a;
+      border: 2px solid var(--border-color);
       border-radius: 8px;
       padding: 10px;
       font-size: 13px;
@@ -164,15 +174,17 @@
       min-height: 54px;
       display: flex;
       align-items: center;
+      color: var(--text);
     }
 
     .match-item.selected {
       border-color: var(--primary);
-      background: #e3f2fd;
+      background: #1e293b;
+      box-shadow: 0 0 8px rgba(0, 210, 255, 0.3);
     }
 
     .match-item.matched {
-      background: #e8f5e9;
+      background: rgba(0, 255, 136, 0.1);
       border-color: var(--accent);
       color: var(--accent);
       cursor: default;
@@ -181,7 +193,7 @@
 
     /* FLASHCARD STYLES */
     .flashcard {
-      background: #ffffff;
+      background: #0f172a;
       border: 2px solid var(--primary);
       border-radius: 12px;
       padding: 20px;
@@ -192,9 +204,10 @@
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      box-shadow: 0 0 15px rgba(0, 210, 255, 0.15);
       margin-bottom: 16px;
       transition: transform 0.2s;
+      color: var(--text);
     }
 
     .flashcard:active {
@@ -207,14 +220,19 @@
     }
 
     .secondary-btn {
-      background: #e0e0e0;
-      color: #333;
-      border: none;
+      background: #1e293b;
+      color: var(--text);
+      border: 1px solid var(--border-color);
       border-radius: 8px;
       padding: 10px;
       font-weight: bold;
       flex: 1;
       cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .secondary-btn:hover {
+      background: #334155;
     }
 
     .final-score {
@@ -222,10 +240,11 @@
       font-weight: 800;
       color: var(--primary);
       margin: 16px 0;
+      text-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
     }
 
     .join-box {
-      background: #e8f5e9;
+      background: rgba(0, 255, 136, 0.05);
       border-left: 4px solid var(--accent);
       padding: 16px;
       border-radius: 8px;
@@ -265,7 +284,7 @@
       </div>
 
       <p id="link-feedback" style="font-weight: bold; min-height: 20px;"></p>
-      <button id="link-next-btn" class="nav-btn" onclick="nextLink()" disabled>Next Pair →</button>
+      <button id="link-next-btn" class="nav-btn" onclick="nextLink()" disabled>Next Pair -></button>
     </div>
 
     <!-- GAME 2: MATCH THE ICONS -->
@@ -280,7 +299,7 @@
       </div>
 
       <p id="match-feedback" style="font-weight: bold; min-height: 20px;"></p>
-      <button id="match-next-btn" class="nav-btn" onclick="goToFlashcards()" disabled>Go to Flashcards →</button>
+      <button id="match-next-btn" class="nav-btn" onclick="goToFlashcards()" disabled>Go to Flashcards -></button>
     </div>
 
     <!-- GAME 3: FLASHCARDS -->
@@ -294,37 +313,36 @@
       </div>
 
       <div class="card-controls">
-        <button class="secondary-btn" onclick="prevCard()">← Jump Back</button>
-        <button class="secondary-btn" onclick="nextCard()">Skip / Next →</button>
+        <button class="secondary-btn" onclick="prevCard()"><- Jump Back</button>
+        <button class="secondary-btn" onclick="nextCard()">Skip / Next -></button>
       </div>
 
-      <button class="nav-btn" style="margin-top: 16px; background: var(--accent);" onclick="finishApp()">Finish Challenge 🎉</button>
+      <button class="nav-btn" style="margin-top: 16px; background: var(--accent); color: #0b0f19;" onclick="finishApp()">Finish Challenge</button>
     </div>
 
     <!-- FINAL SCREEN -->
     <div id="screen-finish" class="hidden">
-      <span class="badge" style="background:#e8f5e9; color:var(--accent);">Quest Completed!</span>
-      <h2>Congratulations! 🎉</h2>
+      <span class="badge" style="background: rgba(0, 255, 136, 0.1); color: var(--accent); border-color: var(--accent);">Quest Completed</span>
+      <h2>Congratulations!</h2>
       <p>You completed the Cyber Security Interactive Challenge!</p>
       
       <div>Your Total Game Score:</div>
       <div id="total-score" class="final-score">0 pts</div>
 
       <div class="join-box">
-        <h3 style="color:var(--accent); margin-bottom: 6px;">Become a Cyber Master!</h3>
-        <p style="margin-bottom:0; color:#333;">
+        <h3 style="color:var(--accent); margin-bottom: 6px;">Become a Cyber Master</h3>
+        <p style="margin-bottom:0; color:var(--text-muted);">
           You don't need prior technical knowledge to join. We offer mentorship, hands-on practice, and projects to help you master tech on your own terms!
         </p>
       </div>
 
-      <button class="nav-btn" style="margin-top:20px; background:var(--accent);" onclick="restart()">Restart for Next Student</button>
+      <button class="nav-btn" style="margin-top:20px; background:var(--accent); color: #0b0f19;" onclick="restart()">Restart for Next Student</button>
     </div>
   </div>
 
   <script>
     let totalScore = 0;
 
-    // DATA DERIVED FROM YOUR DOCUMENT
     const linkPairs = [
       { legitimate: "https://login.microsoft.com", fake: "https://l0gin.microsoft.com" },
       { legitimate: "https://www.apple.com", fake: "https://www.app1e.com" },
@@ -332,6 +350,7 @@
       { legitimate: "www.google.com", fake: "www.googIe.com" }
     ];
 
+    // EMOJIS KEPT HERE FOR MATCHING GAME AS REQUESTED
     const matchItems = [
       { id: 1, icon: "🔒 Padlock Icon", meaning: "Encrypted / Secure Connection (HTTPS)" },
       { id: 2, icon: "🛡️ Shield Icon", meaning: "Network Firewall" },
@@ -400,12 +419,12 @@
 
       if (chosen.dataset.correct === "true") {
         chosen.classList.add("correct");
-        feedback.innerText = "✓ Correct! That is the legitimate URL (+10 pts)";
+        feedback.innerText = "Correct! That is the legitimate URL (+10 pts)";
         feedback.style.color = "var(--accent)";
         totalScore += 10;
       } else {
         chosen.classList.add("wrong");
-        feedback.innerText = "❌ Fake link! Notice the altered characters.";
+        feedback.innerText = "Fake link! Notice the altered characters.";
         feedback.style.color = "var(--danger)";
         if (elemA.dataset.correct === "true") elemA.classList.add("correct");
         if (elemB.dataset.correct === "true") elemB.classList.add("correct");
@@ -481,7 +500,7 @@
         if (selectedIconObj.id === selectedMeaningObj.id) {
           selectedIconObj.element.className = "match-item matched";
           selectedMeaningObj.element.className = "match-item matched";
-          feedback.innerText = "✓ Correct Match! (+10 pts)";
+          feedback.innerText = "Correct Match! (+10 pts)";
           feedback.style.color = "var(--accent)";
           totalScore += 10;
           matchesFound++;
@@ -490,7 +509,7 @@
             document.getElementById("match-next-btn").disabled = false;
           }
         } else {
-          feedback.innerText = "❌ Incorrect match, try again!";
+          feedback.innerText = "Incorrect match, try again!";
           feedback.style.color = "var(--danger)";
           setTimeout(() => {
             if (selectedIconObj && !selectedIconObj.element.classList.contains("matched")) {
@@ -521,7 +540,7 @@
       showingAnswer = false;
       const card = flashcardsData[cardIndex];
       document.getElementById("card-counter").innerText = `Question ${cardIndex + 1} of ${flashcardsData.length}`;
-      document.getElementById("flashcard-display").innerText = "❓ " + card.q;
+      document.getElementById("flashcard-display").innerText = "Question: " + card.q;
       document.getElementById("flashcard-display").style.borderColor = "var(--primary)";
     }
 
@@ -531,10 +550,10 @@
       showingAnswer = !showingAnswer;
 
       if (showingAnswer) {
-        display.innerText = "💡 " + card.a;
+        display.innerText = "Answer: " + card.a;
         display.style.borderColor = "var(--accent)";
       } else {
-        display.innerText = "❓ " + card.q;
+        display.innerText = "Question: " + card.q;
         display.style.borderColor = "var(--primary)";
       }
     }
